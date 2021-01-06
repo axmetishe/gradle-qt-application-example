@@ -1,0 +1,17 @@
+pluginManagement {
+  repositories {
+    mavenLocal()
+    gradlePluginPortal()
+  }
+}
+
+buildCache {
+  local {
+    enabled = true
+  }
+  remote(HttpBuildCache) {
+    url = 'http://127.0.0.1/cache/'
+    push = true
+    allowInsecureProtocol = true
+  }
+}
