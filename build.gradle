@@ -1,6 +1,7 @@
 plugins {
   id 'idea'
   id 'cpp-application'
+  id 'org.platops.gradle.plugins.qt.gradle-qt-plugin' version '0.0.1-SNAPSHOT'
 }
 
 wrapper {
