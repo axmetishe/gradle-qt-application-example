@@ -19,6 +19,13 @@ model {
   }
 }
 
+qt {
+  modules = [
+    'QtWidgets',
+    'QtGui',
+  ]
+}
+
 application {
   targetMachines = [
     machines.windows.x86_64,
