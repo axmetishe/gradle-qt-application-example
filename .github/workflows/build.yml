@@ -20,4 +20,6 @@ jobs:
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
       - name: Test application
-        run: ${{ github.workspace }}/build/exe/main/debug/linux/qt-application-example --version
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: ${{ github.workspace }}/build/exe/main/debug/linux/qt-application-example --version
