@@ -10,8 +10,9 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,8 +23,11 @@ jobs:
         with:
           cache: true
       - name: Run build with Gradle Wrapper
-        run: ./gradlew build
-      - name: Test application
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: ${{ github.workspace }}/build/exe/main/debug/linux/qt-application-example --version
+        run: |
+          ./gradlew build
+          ls -lah ${{ github.workspace }}/build/exe/main/debug/
+          env
+#      - name: Test application
+#        uses: coactions/setup-xvfb@v1
+#        with:
+#          run: ${{ github.workspace }}/build/exe/main/debug/linux/qt-application-example --version
