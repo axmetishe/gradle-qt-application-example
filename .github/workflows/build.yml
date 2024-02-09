@@ -17,17 +17,11 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           cache: true
-      - name: Test ENV
-        env:
-          WORKSPACE: ${{ github.workspace }}/${{github.job}}
-        run: |
-          echo "workspace: $WORKSPACE"
-          dir
-          pwd
-          ls -lah
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
       - name: Test application
         run: |
-          dir ${{ github.workspace }}
+          dir ${{ github.workspace }}/build
+          dir ${{ github.workspace }}/build/exe
+          dir ${{ github.workspace }}/build/exe/main
           ${{ github.workspace }}/build/exe/main/debug/linux/qt-application-example --version
