@@ -22,12 +22,16 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           cache: true
+      - id: platform
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ env.RUNNER_OS }}
+        run: echo ${{ platform.string.outputs.lowercase }}
       - name: Run build with Gradle Wrapper
-        run: |
-          ./gradlew build
-          ls -lah ${{ github.workspace }}/build/exe/main/debug/
-          env
-#      - name: Test application
-#        uses: coactions/setup-xvfb@v1
-#        with:
-#          run: ${{ github.workspace }}/build/exe/main/debug/linux/qt-application-example --version
+        env:
+          JAVA_HOME: JAVA_HOME_17_X64
+        run: ./gradlew build
+      - name: Test application
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: ${{ github.workspace }}/build/exe/main/debug/${{ steps.platform.outputs.lowercase }}/qt-application-example --version
