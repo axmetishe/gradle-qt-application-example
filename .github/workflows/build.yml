@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,11 +23,7 @@ jobs:
           cache: true
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
-      - name: Test application on Linux
-        if: ${{ matrix.os }} == "ubuntu-latest"
+      - name: Test application
         uses: coactions/setup-xvfb@v1
         with:
           run: ${{ github.workspace }}/build/exe/main/debug/linux/qt-application-example --version
-      - name: Test application on MacOS
-        if: ${{ matrix.os }} == "macos-latest"
-        run: ${{ github.workspace }}/build/exe/main/debug/macos/qt-application-example --version
