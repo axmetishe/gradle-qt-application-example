@@ -1,3 +1,5 @@
+rootProject.name = "qt-application-example"
+
 pluginManagement {
   repositories {
     mavenLocal()
