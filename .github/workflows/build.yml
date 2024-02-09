@@ -29,11 +29,11 @@ jobs:
       - id: platform
         uses: ASzc/change-string-case-action@v6
         with:
-          string: ${{ env.RUNNER_OS }}
+          string: ${{ RUNNER_OS }}
 
       - name: Run build with Gradle Wrapper
         env:
-          JAVA_HOME: JAVA_HOME_17_X64
+          JAVA_HOME: ${{ JAVA_HOME_17_X64 }}
         run: ./gradlew build
 
       - name: Test application
