@@ -20,9 +20,4 @@ jobs:
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
       - name: Test application
-        run: |
-          dir ${{ github.workspace }}/build
-          dir ${{ github.workspace }}/build/exe
-          dir ${{ github.workspace }}/build/exe/main/debug
-          dir ${{ github.workspace }}/build/exe/main/debug/linux
-          ${{ github.workspace }}/build/exe/main/debug/linux/qt-application-example --version
+        run: ${{ github.workspace }}/build/exe/main/debug/linux/qt-application-example --version
