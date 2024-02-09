@@ -1,5 +1,5 @@
 # QT Application example for Gradle QT Plugin
-![Application build status](https://github.com/axmetishe/gradle-qt-application-example/actions/workflows/build.yml/badge.svg)
+[![Build Status](https://github.com/axmetishe/gradle-qt-application-example/actions/workflows/build.yml/badge.svg)](https://github.com/axmetishe/gradle-qt-application-example/actions/workflows/build.yml)
 
 This example based on [QT Application Example](https://doc.qt.io/qt-5/qtwidgets-mainwindows-application-example.html),
 with [QT Application Example Sources](https://code.qt.io/cgit/qt/qtbase.git/tree/examples/widgets/mainwindows/application?h=5.15)
