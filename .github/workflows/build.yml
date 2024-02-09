@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, windows-latest, macos-13 ]
     steps:
 
       - name: Checkout
@@ -29,11 +29,11 @@ jobs:
       - id: platform
         uses: ASzc/change-string-case-action@v6
         with:
-          string: ${{ RUNNER_OS }}
+          string: ${{ runner.os }}
 
       - name: Run build with Gradle Wrapper
         env:
-          JAVA_HOME: ${{ JAVA_HOME_17_X64 }}
+          JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
         run: ./gradlew build
 
       - name: Test application
