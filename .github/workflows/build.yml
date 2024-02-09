@@ -14,23 +14,28 @@ jobs:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     steps:
+
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+
       - name: Setup Qt
         uses: jurplel/install-qt-action@v3
         with:
           cache: true
+
       - id: platform
         uses: ASzc/change-string-case-action@v6
         with:
           string: ${{ env.RUNNER_OS }}
-        run: echo ${{ platform.string.outputs.lowercase }}
+
       - name: Run build with Gradle Wrapper
         env:
           JAVA_HOME: JAVA_HOME_17_X64
         run: ./gradlew build
+
       - name: Test application
         uses: coactions/setup-xvfb@v1
         with:
