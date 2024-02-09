@@ -15,6 +15,16 @@ jobs:
         uses: gradle/gradle-build-action@v2
       - name: Setup Qt
         uses: jurplel/install-qt-action@v3
+        with:
+          cache: true
+      - name: Test ENV
+        env:
+          WORKSPACE: ${{ github.workspace }}/${{github.job}}
+        run: |
+          echo "workspace: $WORKSPACE"
+          dir
+          pwd
+          ls -lah
       - name: Run build with Gradle Wrapper
         run: ./gradlew build
       - name: Test application
