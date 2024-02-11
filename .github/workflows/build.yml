@@ -9,14 +9,23 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - uses: ./.github/actions/build.yaml
 
   build-windows:
     runs-on: windows-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - uses: ./.github/actions/build.yaml
 
   build-macos:
     runs-on: macos-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - uses: ./.github/actions/build.yaml

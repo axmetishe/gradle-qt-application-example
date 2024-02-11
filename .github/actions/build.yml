@@ -20,9 +20,6 @@ runs:
             echo SELECTED_JAVA_VERSION=21 >> "${GITHUB_ENV}"
         esac
 
-    - name: Checkout
-      uses: actions/checkout@v3
-
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
