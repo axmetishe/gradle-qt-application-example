@@ -16,7 +16,7 @@ jobs:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
 
     env:
-      SELECTED_JAVA_VERSION: ${{ endsWith(github.ref, '8') && '8' || endsWith(github.ref, '11') && '11' || endsWith(github.ref, '17') && '17' || '21'
+      SELECTED_JAVA_VERSION: ${{ endsWith(github.ref, '8') && '8' || endsWith(github.ref, '11') && '11' || endsWith(github.ref, '17') && '17' || '21' }}
 
     steps:
       - name: Checkout
