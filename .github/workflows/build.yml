@@ -1,31 +1,64 @@
-name: Build Application
+name: 'Build'
 
 on:
   push:
     branches:
       - master
   workflow_dispatch:
+
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: ./.github/actions/build-app
+      - name: Select Java version
+        run: |
+          case "${{ github.ref }}" in
+            "refs/heads/java-8")
+              echo SELECTED_JAVA_VERSION=8 >> "${GITHUB_ENV}"
+              ;;
+            "refs/heads/java-11")
+              echo SELECTED_JAVA_VERSION=11 >> "${GITHUB_ENV}"
+              ;;
+            "refs/heads/java-17")
+              echo SELECTED_JAVA_VERSION=17 >> "${GITHUB_ENV}"
+              ;;
+            *)
+              echo SELECTED_JAVA_VERSION=21 >> "${GITHUB_ENV}"
+          esac
 
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.SELECTED_JAVA_VERSION }}
 
-      - uses: ./.github/actions/build-app
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Setup QT
+        uses: jurplel/install-qt-action@v3
+        with:
+          cache: true
 
-      - uses: ./.github/actions/build-app
+      - name: Get runner platform
+        id: platform
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ runner.os }}
+
+      - name: Run build with Gradle Wrapper
+        run: ./gradlew build
+
+      - name: Test application
+        uses: coactions/setup-xvfb@v1
+        with:
+          run: ${{ github.workspace }}/build/exe/main/debug/${{ steps.platform.outputs.lowercase }}/qt-application-example --version
