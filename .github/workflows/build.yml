@@ -1,4 +1,4 @@
-name: Gradle QT Application Example
+name: Build Application
 
 on:
   push:
@@ -6,42 +6,17 @@ on:
       - master
   workflow_dispatch:
 jobs:
-  build-project:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
+      - uses: ./.github/actions/build.yaml
 
-      - name: Checkout
-        uses: actions/checkout@v3
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: ./.github/actions/build.yaml
 
-      - name: Setup Java 20
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '20'
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: Setup Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          cache: true
-
-      - name: Get runner platform
-        id: platform
-        uses: ASzc/change-string-case-action@v6
-        with:
-          string: ${{ runner.os }}
-
-      - name: Run build with Gradle Wrapper
-        run: ./gradlew build
-
-      - name: Test application
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: ${{ github.workspace }}/build/exe/main/debug/${{ steps.platform.outputs.lowercase }}/qt-application-example --version
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: ./.github/actions/build.yaml

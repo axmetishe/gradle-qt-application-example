@@ -1,0 +1,52 @@
+name: 'Build project'
+description: 'Reusable build acton'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Select Java version
+      run: |
+        case "${{ github.ref }}" in
+          "refs/heads/java-8")
+            echo SELECTED_JAVA_VERSION=8 >> "${GITHUB_ENV}"
+            ;;
+          "refs/heads/java-11")
+            echo SELECTED_JAVA_VERSION=11 >> "${GITHUB_ENV}"
+            ;;
+          "refs/heads/java-17")
+            echo SELECTED_JAVA_VERSION=17 >> "${GITHUB_ENV}"
+            ;;
+          *)
+            echo SELECTED_JAVA_VERSION=21 >> "${GITHUB_ENV}"
+        esac
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: ${{ env.SELECTED_JAVA_VERSION }}
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+
+    - name: Setup QT
+      uses: jurplel/install-qt-action@v3
+      with:
+        cache: true
+
+    - name: Get runner platform
+      id: platform
+      uses: ASzc/change-string-case-action@v6
+      with:
+        string: ${{ runner.os }}
+
+    - name: Run build with Gradle Wrapper
+      run: ./gradlew build
+
+    - name: Test application
+      uses: coactions/setup-xvfb@v1
+      with:
+        run: ${{ github.workspace }}/build/exe/main/debug/${{ steps.platform.outputs.lowercase }}/qt-application-example --version
