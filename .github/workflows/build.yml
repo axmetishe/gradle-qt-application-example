@@ -1,33 +1,42 @@
-name: Gradle QT Application Example
+name: 'Build'
 
 on:
   push:
     branches:
       - master
   workflow_dispatch:
+
 jobs:
-  build-project:
+  build:
     runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
-    steps:
 
+    env:
+      SELECTED_JAVA_VERSION: ${{ endsWith(github.ref, '8') && '8' || endsWith(github.ref, '11') && '11' || endsWith(github.ref, '17') && '17' || '21' }}
+
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Java 20
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '20'
+          java-version: ${{ env.SELECTED_JAVA_VERSION }}
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          cache-disabled: false
+          cache-read-only: false
+          cache-write-only: false
+          cache-overwrite-existing: true
 
-      - name: Setup Qt
+      - name: Setup QT
         uses: jurplel/install-qt-action@v3
         with:
           cache: true
@@ -39,7 +48,7 @@ jobs:
           string: ${{ runner.os }}
 
       - name: Run build with Gradle Wrapper
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
 
       - name: Test application
         uses: coactions/setup-xvfb@v1
